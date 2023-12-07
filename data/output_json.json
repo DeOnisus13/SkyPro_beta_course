@@ -1,0 +1,79 @@
+{
+    "greeting": "Доброе утро",
+    "cards": [
+        {
+            "last_digits": "*4556",
+            "total_spent": 1085.0,
+            "cashback": 40.0
+        },
+        {
+            "last_digits": "*7197",
+            "total_spent": 16532.78,
+            "cashback": 165.33
+        }
+    ],
+    "top_transactions": [
+        {
+            "date": "08.03.2020 10:58:42",
+            "amount": -7861.28,
+            "category": "Другое",
+            "description": "ГУП ВЦКП ЖХ"
+        },
+        {
+            "date": "08.03.2020 11:02:59",
+            "amount": -2119.79,
+            "category": "Другое",
+            "description": "ГУП ВЦКП ЖХ"
+        },
+        {
+            "date": "08.03.2020 16:31:47",
+            "amount": 1750.0,
+            "category": "Пополнения",
+            "description": "Перевод с карты"
+        },
+        {
+            "date": "11.03.2020 16:02:33",
+            "amount": -689.0,
+            "category": "Дом и ремонт",
+            "description": "Строитель"
+        },
+        {
+            "date": "13.03.2020 19:49:56",
+            "amount": -547.0,
+            "category": "Аптеки",
+            "description": "Apteka 41"
+        }
+    ],
+    "currency_rates": [
+        {
+            "currency": "USD",
+            "rate": 92.7826
+        },
+        {
+            "currency": "EUR",
+            "rate": 100.1353
+        }
+    ],
+    "stock_prices": [
+        {
+            "stock": "AAPL",
+            "price": 192.32
+        },
+        {
+            "stock": "AMZN",
+            "price": 144.52
+        },
+        {
+            "stock": "GOOGL",
+            "price": 130.02
+        },
+        {
+            "stock": "MSFT",
+            "price": 368.8
+        },
+        {
+            "stock": "TSLA",
+            "price": 239.37
+        }
+    ]
+}
