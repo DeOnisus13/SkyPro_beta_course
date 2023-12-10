@@ -1,10 +1,19 @@
 from datetime import datetime
+
+import pytest
 import requests
 from src.views import get_hello_to_time, get_currency_rate
 
 
 def test_get_hello_to_time():
-    assert get_hello_to_time() in ["Добрый день", "Доброе утро", "Добрый вечер", "Доброй ночи"]
+    if get_hello_to_time() == 4:
+        assert get_hello_to_time() == "Доброй ночи"
+    elif get_hello_to_time() == 8:
+        assert get_hello_to_time() == "Доброе утро"
+    elif get_hello_to_time() == 14:
+        assert get_hello_to_time() == "Добрый день"
+    elif get_hello_to_time() == 20:
+        assert get_hello_to_time() == "Добрый вечер"
 
 
 def test_get_currency_rate_valid_input():
