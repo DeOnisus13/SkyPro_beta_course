@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+from typing import Any
 
 import pandas as pd
 import requests
@@ -9,7 +10,10 @@ from dotenv import load_dotenv
 from config import JSON_OUT_PATH, USER_SETTINGS_PATH, XLS_FILE_PATH
 
 
-def get_hello_to_time():
+def get_hello_to_time() -> str:
+    """
+    Функция для вывода приветственного сообщения в зависимости от текущего часа
+    """
     current_date_time = datetime.now()
     if 0 <= current_date_time.hour < 6:
         return "Доброй ночи"
@@ -21,7 +25,10 @@ def get_hello_to_time():
         return "Добрый вечер"
 
 
-def read_xls_file(file_path):
+def read_xls_file(file_path: str) -> Any:
+    """
+    Функция для чтения xls файла
+    """
     # Исходный файл
     df_raw = pd.read_excel(file_path)
     # Фильтрует исходный файл по статусу операции
@@ -31,7 +38,13 @@ def read_xls_file(file_path):
     return df_ok
 
 
-def get_card_info(file_path, end_date=None, start_date=None):
+def get_card_info(file_path: Any, end_date: str | datetime, start_date: str | datetime) -> list[dict]:
+    """
+    Функция для вывода статистики по картам пользователя. Последние 4 цифры карты, сумму расходов и кэшбэк.
+    Принимает на вход данные для обработки и даты.
+    Выводит список словарей в необходимом виде.
+    :return:
+    """
     # Из функции получаем обработанный файл
     df_ok = read_xls_file(file_path)
     # Фильтруем по не пустому номеру карты
@@ -78,7 +91,12 @@ def get_card_info(file_path, end_date=None, start_date=None):
     return result_list_of_cards
 
 
-def get_top_5_largest_payments(file_path, end_date=None, start_date=None):
+def get_top_5_largest_payments(file_path: Any, end_date: str | datetime, start_date: str | datetime) -> list[dict]:
+    """
+    Функция для вывода 5 самых больших транзакций.
+    Принимает на вход данные для обработки и даты.
+    Вывод - список словарей с необходимыми данными.
+    """
     df = read_xls_file(file_path)
     # Фильтр DataFrame по дате
     filtered_df = df[(df["Дата операции"] >= start_date) & (df["Дата операции"] <= end_date)]
@@ -113,7 +131,12 @@ def get_top_5_largest_payments(file_path, end_date=None, start_date=None):
     return result_top_5_payments
 
 
-def get_currency_rate(currencies):
+def get_currency_rate(currencies: list[str]) -> list[dict]:
+    """
+    Функция для вывода курса валют.
+    Принимает на вход список необходимых валют для конвертации в рубли.
+    Выводит список словарей в необходимом формате.
+    """
     try:
         response = requests.get("https://www.cbr-xml-daily.ru/daily_json.js")
         currency_data = response.json()
@@ -130,9 +153,15 @@ def get_currency_rate(currencies):
 
     except Exception as error:
         print(f"Возникла ошибка {type(error).__name__}")
+        raise error
 
 
-def get_stock_price(stocks):
+def get_stock_price(stocks: list[str]) -> list[dict]:
+    """
+    Функция для вывода текущей стоимости акций.
+    Принимает на вход список акций пользователя.
+    Выводит список словарей в необходимом формате.
+    """
     try:
         load_dotenv()
         api_key = os.getenv("API_KEY")
@@ -147,10 +176,15 @@ def get_stock_price(stocks):
 
     except Exception as error:
         print(f"Возникла ошибка {type(error).__name__}")
+        raise error
 
 
-def generate_main_view_json(input_date=None, date_first=None):
-    if not date_first:
+def generate_main_view_json(input_date: str, date_first: str = "") -> None:
+    """
+    Функция для вывода json файла в необходимом формате.
+    Принимает дату от которой нужно брать данные и опционально дату конца сбора данных.
+    """
+    if date_first == "":
         date_first = input_date[0:8] + "01 00:00:00"
     start = datetime.strptime(date_first, "%Y-%m-%d %H:%M:%S")
     end = datetime.strptime(input_date, "%Y-%m-%d %H:%M:%S")
@@ -171,7 +205,3 @@ def generate_main_view_json(input_date=None, date_first=None):
 
     with open(JSON_OUT_PATH, "w", encoding="utf-8") as file:
         json.dump(report, file, ensure_ascii=False, indent=4)
-
-
-if __name__ == "__main__":
-    generate_main_view_json("2020-03-14 16:00:00")
